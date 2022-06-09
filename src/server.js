@@ -1,5 +1,6 @@
 import express from "express";
-import res from "express/lib/response";
+import http from "http";
+import WebSocket from "ws";
 
 const app = express();
 app.set("view engine", "pug");
@@ -8,4 +9,9 @@ app.use("/public", express.static(__dirname + "/public"));
 app.get("/", (req, res) => res.render("home"));
 app.get("/*", (req, res) => res.redirect("/"));
 console.log("hello");
-app.listen(3000);
+const handleListen = () => console.log(`Listening on http://localhost:3000`);
+// app.listen(3000);
+const server = http.createServer(app);
+const wss = new WebSocket.Server({ server }); // 같은 서버에서 http,webSpcket을 둘 다 작동
+
+server.listen(3000, handleListen);
