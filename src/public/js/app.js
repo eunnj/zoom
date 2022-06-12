@@ -1,9 +1,10 @@
 const socket = new WebSocket(`ws://${window.location.host}`);
 // 여기 front에서 backend로 메세지를 보낼 수 있다.
 
-socket.addEventListener("open", () => {
+function handleOpen() {
   console.log("Connected to Server");
-});
+}
+socket.addEventListener("open", handleOpen);
 
 socket.addEventListener("message", (message) => {
   console.log("Just got this: ", message.data);
