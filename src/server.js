@@ -15,8 +15,14 @@ const handleListen = () => console.log(`Listening on http://localhost:3000`);
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server }); // ({server})=>같은 서버에서 http,webSpcket을 둘 다 작동
 
-function handleConnection(socket) {
-  console.log(socket);
-}
-wss.on("connection", handleConnection);
+wss.on("connection", (socket) => {
+  console.log("Connected to Browser");
+  socket.on("close", () => {
+    console.log("Disconnected from the Browser X");
+  });
+  socket.on("message", (message) => {
+    console.log(message.toString("utf8"));
+  });
+  socket.send("hello!!!");
+});
 server.listen(3000, handleListen);
