@@ -18,14 +18,21 @@ const wss = new WebSocket.Server({ server }); // ({server})=>같은 서버에서
 function onSocketClose() {
   console.log("Disconnected from the Browser X");
 }
-function onSocketMessage(message) {
-  console.log(message.toString("utf8"));
-}
+// function onSocketMessage(message) {
+//   console.log(message.toString("utf8"));
+// }
+
+// 각 브라우저의 socket을 담는 배역
+const sockets = [];
+
 wss.on("connection", (socket) => {
+  sockets.push(socket);
   console.log("Connected to Browser");
   socket.on("close", onSocketClose);
-  socket.on("message", onSocketMessage);
-  //back->front 메시지 보내기
-  socket.send("hello!!!");
+  socket.on("message", (message) => {
+    sockets.forEach((aSocket) => {
+      aSocket.send(message.toString("utf8"));
+    });
+  });
 });
 server.listen(3000, handleListen);
