@@ -1,6 +1,7 @@
 import express from "express";
 import http from "http";
-import WebSocket from "ws";
+import SocketIO from "socket.io";
+// import WebSocket from "ws";
 
 const app = express();
 app.set("view engine", "pug");
@@ -10,14 +11,16 @@ app.get("/", (req, res) => res.render("home"));
 app.get("/*", (req, res) => res.redirect("/"));
 console.log("hello");
 
-const handleListen = () => console.log(`Listening on http://localhost:3000`);
-// app.listen(3000);
-const server = http.createServer(app);
+const httpServer = http.createServer(app);
+const wsServer = SocketIO(httpServer);
+
+/*
 const wss = new WebSocket.Server({ server }); // ({server})=>같은 서버에서 http,webSpcket을 둘 다 작동
 
 function onSocketClose() {
   console.log("Disconnected from the Browser X");
 }
+
 // function onSocketMessage(message) {
 //   console.log(message.toString("utf8"));
 // }
@@ -41,5 +44,7 @@ wss.on("connection", (socket) => {
         socket["nickname"] = message.payload;
     }
   });
-});
-server.listen(3000, handleListen);
+});*/
+
+const handleListen = () => console.log(`Listening on http://localhost:3000`);
+httpServer.listen(3000, handleListen);
